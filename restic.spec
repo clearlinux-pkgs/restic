@@ -6,13 +6,14 @@
 #
 Name     : restic
 Version  : 0.9.4
-Release  : 1
+Release  : 2
 URL      : https://github.com/restic/restic/releases/download/v0.9.4/restic-0.9.4.tar.gz
 Source0  : https://github.com/restic/restic/releases/download/v0.9.4/restic-0.9.4.tar.gz
 Source99 : https://github.com/restic/restic/releases/download/v0.9.4/restic-0.9.4.tar.gz.asc
 Summary  : restic is a backup program that is fast, efficient and secure.
 Group    : Development/Tools
 License  : Apache-2.0 BSD-2-Clause BSD-3-Clause LGPL-3.0 MIT MPL-2.0-no-copyleft-exception
+Requires: restic-bin = %{version}-%{release}
 Requires: restic-license = %{version}-%{release}
 BuildRequires : buildreq-golang
 
@@ -33,6 +34,15 @@ Versatile storage: Users can provide many different places to store the backups.
 
 Free: restic is free software and licensed under the BSD 2-Clause License and actively developed on GitHub.
 
+%package bin
+Summary: bin components for the restic package.
+Group: Binaries
+Requires: restic-license = %{version}-%{release}
+
+%description bin
+bin components for the restic package.
+
+
 %package license
 Summary: license components for the restic package.
 Group: Default
@@ -49,7 +59,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-go build -mod vendor
+go build || go run -mod=vendor build.go
 
 %install
 rm -rf %{buildroot}
@@ -99,9 +109,17 @@ cp vendor/gopkg.in/yaml.v2/LICENSE %{buildroot}/usr/share/package-licenses/resti
 cp vendor/gopkg.in/yaml.v2/LICENSE.libyaml %{buildroot}/usr/share/package-licenses/restic/vendor_gopkg.in_yaml.v2_LICENSE.libyaml
 cp vendor/gopkg.in/yaml.v2/NOTICE %{buildroot}/usr/share/package-licenses/restic/vendor_gopkg.in_yaml.v2_NOTICE
 
+## install_append content
+install -d %{buildroot}/usr/bin/
+install -m0755 restic %{buildroot}/usr/bin/
+## install_append end
 
 %files
 %defattr(-,root,root,-)
+
+%files bin
+%defattr(-,root,root,-)
+/usr/bin/restic
 
 %files license
 %defattr(0644,root,root,0755)

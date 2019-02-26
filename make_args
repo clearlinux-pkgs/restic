@@ -1,1 +1,1 @@
--mod vendor
+|| go run -mod=vendor build.go

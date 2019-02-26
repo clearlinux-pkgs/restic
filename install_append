@@ -1,0 +1,2 @@
+install -d %{buildroot}/usr/bin/
+install -m0755 restic %{buildroot}/usr/bin/
