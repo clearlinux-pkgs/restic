@@ -1,2 +1,8 @@
 install -d %{buildroot}/usr/bin/
+install -d %{buildroot}/usr/share/man/man1
+install -d %{buildroot}/usr/share/zsh/site-functions
+install -d %{buildroot}/usr/share/bash-completion/completions
 install -m0755 restic %{buildroot}/usr/bin/
+install -p -m 644 doc/man/* %{buildroot}/usr/share/man/man1/
+install -p -m 644 doc/zsh-completion.zsh %{buildroot}/usr/share/zsh/site-functions/_restic
+install -p -m 644 doc/bash-completion.sh %{buildroot}/usr/share/bash-completion/completions/restic

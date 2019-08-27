@@ -5,16 +5,18 @@
 # Source0 file verified with key 0x91A6868BD3F7A907 (alexander@bumpern.de)
 #
 Name     : restic
-Version  : 0.9.4
-Release  : 2
-URL      : https://github.com/restic/restic/releases/download/v0.9.4/restic-0.9.4.tar.gz
-Source0  : https://github.com/restic/restic/releases/download/v0.9.4/restic-0.9.4.tar.gz
-Source99 : https://github.com/restic/restic/releases/download/v0.9.4/restic-0.9.4.tar.gz.asc
+Version  : 0.9.5
+Release  : 3
+URL      : https://github.com/restic/restic/releases/download/v0.9.5/restic-0.9.5.tar.gz
+Source0  : https://github.com/restic/restic/releases/download/v0.9.5/restic-0.9.5.tar.gz
+Source1 : https://github.com/restic/restic/releases/download/v0.9.5/restic-0.9.5.tar.gz.asc
 Summary  : restic is a backup program that is fast, efficient and secure.
 Group    : Development/Tools
-License  : Apache-2.0 BSD-2-Clause BSD-3-Clause LGPL-3.0 MIT MPL-2.0-no-copyleft-exception
+License  : Apache-2.0 BSD-2-Clause BSD-3-Clause LGPL-3.0 MIT
 Requires: restic-bin = %{version}-%{release}
+Requires: restic-data = %{version}-%{release}
 Requires: restic-license = %{version}-%{release}
+Requires: restic-man = %{version}-%{release}
 BuildRequires : buildreq-golang
 
 %description
@@ -37,10 +39,19 @@ Free: restic is free software and licensed under the BSD 2-Clause License and ac
 %package bin
 Summary: bin components for the restic package.
 Group: Binaries
+Requires: restic-data = %{version}-%{release}
 Requires: restic-license = %{version}-%{release}
 
 %description bin
 bin components for the restic package.
+
+
+%package data
+Summary: data components for the restic package.
+Group: Data
+
+%description data
+data components for the restic package.
 
 
 %package license
@@ -51,32 +62,51 @@ Group: Default
 license components for the restic package.
 
 
+%package man
+Summary: man components for the restic package.
+Group: Default
+
+%description man
+man components for the restic package.
+
+
 %prep
-%setup -q -n restic-0.9.4
+%setup -q -n restic-0.9.5
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-go build || go run -mod=vendor build.go
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1566944355
+export GCC_IGNORE_WERROR=1
+export GOPROXY=file:///usr/share/goproxy
+export CFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$CFLAGS -fno-lto "
+export FFLAGS="$CFLAGS -fno-lto "
+export CXXFLAGS="$CXXFLAGS -fno-lto "
+make  %{?_smp_mflags} || go build -mod vendor
+
 
 %install
+export SOURCE_DATE_EPOCH=1566944355
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/restic
 cp LICENSE %{buildroot}/usr/share/package-licenses/restic/LICENSE
 cp vendor/bazil.org/fuse/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_bazil.org_fuse_LICENSE
 cp vendor/cloud.google.com/go/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_cloud.google.com_go_LICENSE
+cp vendor/contrib.go.opencensus.io/exporter/ocagent/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_contrib.go.opencensus.io_exporter_ocagent_LICENSE
 cp vendor/github.com/Azure/azure-sdk-for-go/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_github.com_Azure_azure-sdk-for-go_LICENSE
 cp vendor/github.com/Azure/go-autorest/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_github.com_Azure_go-autorest_LICENSE
 cp vendor/github.com/cenkalti/backoff/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_github.com_cenkalti_backoff_LICENSE
+cp vendor/github.com/census-instrumentation/opencensus-proto/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_github.com_census-instrumentation_opencensus-proto_LICENSE
 cp vendor/github.com/cpuguy83/go-md2man/LICENSE.md %{buildroot}/usr/share/package-licenses/restic/vendor_github.com_cpuguy83_go-md2man_LICENSE.md
 cp vendor/github.com/dgrijalva/jwt-go/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_github.com_dgrijalva_jwt-go_LICENSE
 cp vendor/github.com/elithrar/simple-scrypt/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_github.com_elithrar_simple-scrypt_LICENSE
 cp vendor/github.com/go-ini/ini/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_github.com_go-ini_ini_LICENSE
 cp vendor/github.com/golang/protobuf/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_github.com_golang_protobuf_LICENSE
 cp vendor/github.com/google/go-cmp/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_github.com_google_go-cmp_LICENSE
-cp vendor/github.com/hashicorp/golang-lru/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_github.com_hashicorp_golang-lru_LICENSE
+cp vendor/github.com/grpc-ecosystem/grpc-gateway/LICENSE.txt %{buildroot}/usr/share/package-licenses/restic/vendor_github.com_grpc-ecosystem_grpc-gateway_LICENSE.txt
 cp vendor/github.com/inconshreveable/mousetrap/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_github.com_inconshreveable_mousetrap_LICENSE
 cp vendor/github.com/juju/ratelimit/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_github.com_juju_ratelimit_LICENSE
 cp vendor/github.com/kr/fs/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_github.com_kr_fs_LICENSE
@@ -95,6 +125,7 @@ cp vendor/github.com/russross/blackfriday/LICENSE.txt %{buildroot}/usr/share/pac
 cp vendor/github.com/satori/go.uuid/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_github.com_satori_go.uuid_LICENSE
 cp vendor/github.com/spf13/cobra/LICENSE.txt %{buildroot}/usr/share/package-licenses/restic/vendor_github.com_spf13_cobra_LICENSE.txt
 cp vendor/github.com/spf13/pflag/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_github.com_spf13_pflag_LICENSE
+cp vendor/go.opencensus.io/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_go.opencensus.io_LICENSE
 cp vendor/golang.org/x/crypto/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_golang.org_x_crypto_LICENSE
 cp vendor/golang.org/x/net/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_golang.org_x_net_LICENSE
 cp vendor/golang.org/x/oauth2/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_golang.org_x_oauth2_LICENSE
@@ -104,14 +135,22 @@ cp vendor/golang.org/x/text/LICENSE %{buildroot}/usr/share/package-licenses/rest
 cp vendor/google.golang.org/api/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_google.golang.org_api_LICENSE
 cp vendor/google.golang.org/api/googleapi/internal/uritemplates/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_google.golang.org_api_googleapi_internal_uritemplates_LICENSE
 cp vendor/google.golang.org/appengine/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_google.golang.org_appengine_LICENSE
+cp vendor/google.golang.org/genproto/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_google.golang.org_genproto_LICENSE
+cp vendor/google.golang.org/grpc/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_google.golang.org_grpc_LICENSE
 cp vendor/gopkg.in/tomb.v2/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_gopkg.in_tomb.v2_LICENSE
 cp vendor/gopkg.in/yaml.v2/LICENSE %{buildroot}/usr/share/package-licenses/restic/vendor_gopkg.in_yaml.v2_LICENSE
 cp vendor/gopkg.in/yaml.v2/LICENSE.libyaml %{buildroot}/usr/share/package-licenses/restic/vendor_gopkg.in_yaml.v2_LICENSE.libyaml
 cp vendor/gopkg.in/yaml.v2/NOTICE %{buildroot}/usr/share/package-licenses/restic/vendor_gopkg.in_yaml.v2_NOTICE
-
+true
 ## install_append content
 install -d %{buildroot}/usr/bin/
+install -d %{buildroot}/usr/share/man/man1
+install -d %{buildroot}/usr/share/zsh/site-functions
+install -d %{buildroot}/usr/share/bash-completion/completions
 install -m0755 restic %{buildroot}/usr/bin/
+install -p -m 644 doc/man/* %{buildroot}/usr/share/man/man1/
+install -p -m 644 doc/zsh-completion.zsh %{buildroot}/usr/share/zsh/site-functions/_restic
+install -p -m 644 doc/bash-completion.sh %{buildroot}/usr/share/bash-completion/completions/restic
 ## install_append end
 
 %files
@@ -121,21 +160,28 @@ install -m0755 restic %{buildroot}/usr/bin/
 %defattr(-,root,root,-)
 /usr/bin/restic
 
+%files data
+%defattr(-,root,root,-)
+/usr/share/bash-completion/completions/restic
+/usr/share/zsh/site-functions/_restic
+
 %files license
 %defattr(0644,root,root,0755)
 /usr/share/package-licenses/restic/LICENSE
 /usr/share/package-licenses/restic/vendor_bazil.org_fuse_LICENSE
 /usr/share/package-licenses/restic/vendor_cloud.google.com_go_LICENSE
+/usr/share/package-licenses/restic/vendor_contrib.go.opencensus.io_exporter_ocagent_LICENSE
 /usr/share/package-licenses/restic/vendor_github.com_Azure_azure-sdk-for-go_LICENSE
 /usr/share/package-licenses/restic/vendor_github.com_Azure_go-autorest_LICENSE
 /usr/share/package-licenses/restic/vendor_github.com_cenkalti_backoff_LICENSE
+/usr/share/package-licenses/restic/vendor_github.com_census-instrumentation_opencensus-proto_LICENSE
 /usr/share/package-licenses/restic/vendor_github.com_cpuguy83_go-md2man_LICENSE.md
 /usr/share/package-licenses/restic/vendor_github.com_dgrijalva_jwt-go_LICENSE
 /usr/share/package-licenses/restic/vendor_github.com_elithrar_simple-scrypt_LICENSE
 /usr/share/package-licenses/restic/vendor_github.com_go-ini_ini_LICENSE
 /usr/share/package-licenses/restic/vendor_github.com_golang_protobuf_LICENSE
 /usr/share/package-licenses/restic/vendor_github.com_google_go-cmp_LICENSE
-/usr/share/package-licenses/restic/vendor_github.com_hashicorp_golang-lru_LICENSE
+/usr/share/package-licenses/restic/vendor_github.com_grpc-ecosystem_grpc-gateway_LICENSE.txt
 /usr/share/package-licenses/restic/vendor_github.com_inconshreveable_mousetrap_LICENSE
 /usr/share/package-licenses/restic/vendor_github.com_juju_ratelimit_LICENSE
 /usr/share/package-licenses/restic/vendor_github.com_kr_fs_LICENSE
@@ -154,6 +200,7 @@ install -m0755 restic %{buildroot}/usr/bin/
 /usr/share/package-licenses/restic/vendor_github.com_satori_go.uuid_LICENSE
 /usr/share/package-licenses/restic/vendor_github.com_spf13_cobra_LICENSE.txt
 /usr/share/package-licenses/restic/vendor_github.com_spf13_pflag_LICENSE
+/usr/share/package-licenses/restic/vendor_go.opencensus.io_LICENSE
 /usr/share/package-licenses/restic/vendor_golang.org_x_crypto_LICENSE
 /usr/share/package-licenses/restic/vendor_golang.org_x_net_LICENSE
 /usr/share/package-licenses/restic/vendor_golang.org_x_oauth2_LICENSE
@@ -163,7 +210,38 @@ install -m0755 restic %{buildroot}/usr/bin/
 /usr/share/package-licenses/restic/vendor_google.golang.org_api_LICENSE
 /usr/share/package-licenses/restic/vendor_google.golang.org_api_googleapi_internal_uritemplates_LICENSE
 /usr/share/package-licenses/restic/vendor_google.golang.org_appengine_LICENSE
+/usr/share/package-licenses/restic/vendor_google.golang.org_genproto_LICENSE
+/usr/share/package-licenses/restic/vendor_google.golang.org_grpc_LICENSE
 /usr/share/package-licenses/restic/vendor_gopkg.in_tomb.v2_LICENSE
 /usr/share/package-licenses/restic/vendor_gopkg.in_yaml.v2_LICENSE
 /usr/share/package-licenses/restic/vendor_gopkg.in_yaml.v2_LICENSE.libyaml
 /usr/share/package-licenses/restic/vendor_gopkg.in_yaml.v2_NOTICE
+
+%files man
+%defattr(0644,root,root,0755)
+/usr/share/man/man1/restic-backup.1
+/usr/share/man/man1/restic-cache.1
+/usr/share/man/man1/restic-cat.1
+/usr/share/man/man1/restic-check.1
+/usr/share/man/man1/restic-diff.1
+/usr/share/man/man1/restic-dump.1
+/usr/share/man/man1/restic-find.1
+/usr/share/man/man1/restic-forget.1
+/usr/share/man/man1/restic-generate.1
+/usr/share/man/man1/restic-init.1
+/usr/share/man/man1/restic-key.1
+/usr/share/man/man1/restic-list.1
+/usr/share/man/man1/restic-ls.1
+/usr/share/man/man1/restic-migrate.1
+/usr/share/man/man1/restic-mount.1
+/usr/share/man/man1/restic-prune.1
+/usr/share/man/man1/restic-rebuild-index.1
+/usr/share/man/man1/restic-recover.1
+/usr/share/man/man1/restic-restore.1
+/usr/share/man/man1/restic-self-update.1
+/usr/share/man/man1/restic-snapshots.1
+/usr/share/man/man1/restic-stats.1
+/usr/share/man/man1/restic-tag.1
+/usr/share/man/man1/restic-unlock.1
+/usr/share/man/man1/restic-version.1
+/usr/share/man/man1/restic.1
