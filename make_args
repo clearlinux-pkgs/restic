@@ -1,1 +1,1 @@
-|| go build -mod vendor
+GOFLAGS='-buildmode=pie -v'
