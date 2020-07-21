@@ -6,7 +6,7 @@
 #
 Name     : restic
 Version  : 0.9.5
-Release  : 4
+Release  : 5
 URL      : https://github.com/restic/restic/releases/download/v0.9.5/restic-0.9.5.tar.gz
 Source0  : https://github.com/restic/restic/releases/download/v0.9.5/restic-0.9.5.tar.gz
 Source1  : https://github.com/restic/restic/releases/download/v0.9.5/restic-0.9.5.tar.gz.asc
