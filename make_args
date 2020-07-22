@@ -1,1 +1,1 @@
-GOFLAGS='-buildmode=pie -v'
+-f foo.make || go build -mod=vendor -v -buildmode=pie -ldflags '-extldflags "-static-pie"' -tags netgo,osusergo -o restic ./cmd/restic

@@ -5,14 +5,14 @@
 # Source0 file verified with key 0x91A6868BD3F7A907 (alexander@bumpern.de)
 #
 Name     : restic
-Version  : 0.9.5
-Release  : 5
-URL      : https://github.com/restic/restic/releases/download/v0.9.5/restic-0.9.5.tar.gz
-Source0  : https://github.com/restic/restic/releases/download/v0.9.5/restic-0.9.5.tar.gz
-Source1  : https://github.com/restic/restic/releases/download/v0.9.5/restic-0.9.5.tar.gz.asc
+Version  : 0.9.6
+Release  : 6
+URL      : https://github.com/restic/restic/releases/download/v0.9.6/restic-0.9.6.tar.gz
+Source0  : https://github.com/restic/restic/releases/download/v0.9.6/restic-0.9.6.tar.gz
+Source1  : https://github.com/restic/restic/releases/download/v0.9.6/restic-0.9.6.tar.gz.asc
 Summary  : restic is a backup program that is fast, efficient and secure.
 Group    : Development/Tools
-License  : Apache-2.0 BSD-2-Clause BSD-3-Clause LGPL-3.0 MIT
+License  : Apache-2.0 BSD-2-Clause BSD-3-Clause LGPL-3.0 MIT MPL-2.0
 Requires: restic-bin = %{version}-%{release}
 Requires: restic-data = %{version}-%{release}
 Requires: restic-license = %{version}-%{release}
@@ -71,76 +71,79 @@ man components for the restic package.
 
 
 %prep
-%setup -q -n restic-0.9.5
-cd %{_builddir}/restic-0.9.5
+%setup -q -n restic-0.9.6
+cd %{_builddir}/restic-0.9.6
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1595023673
+export SOURCE_DATE_EPOCH=1595389387
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$FFLAGS -fno-lto "
 export FFLAGS="$FFLAGS -fno-lto "
 export CXXFLAGS="$CXXFLAGS -fno-lto "
-make  %{?_smp_mflags}  GOFLAGS='-buildmode=pie -v'
+make  %{?_smp_mflags}  -f foo.make || go build -mod=vendor -v -buildmode=pie -ldflags '-extldflags "-static-pie"' -tags netgo,osusergo -o restic ./cmd/restic
 
 
 %install
-export SOURCE_DATE_EPOCH=1595023673
+export SOURCE_DATE_EPOCH=1595389387
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/restic
-cp %{_builddir}/restic-0.9.5/LICENSE %{buildroot}/usr/share/package-licenses/restic/68645af047dcb3bcca960d2c1b1ece30a7141f76
-cp %{_builddir}/restic-0.9.5/vendor/bazil.org/fuse/LICENSE %{buildroot}/usr/share/package-licenses/restic/ae97d9da13b4f2a9a6c46d22d9af574956e4ea59
-cp %{_builddir}/restic-0.9.5/vendor/cloud.google.com/go/LICENSE %{buildroot}/usr/share/package-licenses/restic/2b8b815229aa8a61e483fb4ba0588b8b6c491890
-cp %{_builddir}/restic-0.9.5/vendor/contrib.go.opencensus.io/exporter/ocagent/LICENSE %{buildroot}/usr/share/package-licenses/restic/7df059597099bb7dcf25d2a9aedfaf4465f72d8d
-cp %{_builddir}/restic-0.9.5/vendor/github.com/Azure/azure-sdk-for-go/LICENSE %{buildroot}/usr/share/package-licenses/restic/861181924d993ee58a17a2c3c3a3faecf895849c
-cp %{_builddir}/restic-0.9.5/vendor/github.com/Azure/go-autorest/LICENSE %{buildroot}/usr/share/package-licenses/restic/308c47a3ea356402d2d14241da9a9f64cf404008
-cp %{_builddir}/restic-0.9.5/vendor/github.com/cenkalti/backoff/LICENSE %{buildroot}/usr/share/package-licenses/restic/101c182fa18fd56a09164278f17e4282264c5e9e
-cp %{_builddir}/restic-0.9.5/vendor/github.com/census-instrumentation/opencensus-proto/LICENSE %{buildroot}/usr/share/package-licenses/restic/2b8b815229aa8a61e483fb4ba0588b8b6c491890
-cp %{_builddir}/restic-0.9.5/vendor/github.com/cpuguy83/go-md2man/LICENSE.md %{buildroot}/usr/share/package-licenses/restic/b7a606730713ac061594edab33cf941704b4a95c
-cp %{_builddir}/restic-0.9.5/vendor/github.com/dgrijalva/jwt-go/LICENSE %{buildroot}/usr/share/package-licenses/restic/b132e03c6b6bd85fbc2394f808acae8f5d0ebaf0
-cp %{_builddir}/restic-0.9.5/vendor/github.com/elithrar/simple-scrypt/LICENSE %{buildroot}/usr/share/package-licenses/restic/71a24b258c1c84ec9cb58aa6174e62477ae0af0b
-cp %{_builddir}/restic-0.9.5/vendor/github.com/go-ini/ini/LICENSE %{buildroot}/usr/share/package-licenses/restic/e4ef54f2c30670f950d5e196afa09c88d8ef0c8a
-cp %{_builddir}/restic-0.9.5/vendor/github.com/golang/protobuf/LICENSE %{buildroot}/usr/share/package-licenses/restic/aa9b240f558caed367795f667629ccbca28f20b2
-cp %{_builddir}/restic-0.9.5/vendor/github.com/google/go-cmp/LICENSE %{buildroot}/usr/share/package-licenses/restic/7080652cc78cd9855d39e324529a3b5f3745dcd6
-cp %{_builddir}/restic-0.9.5/vendor/github.com/grpc-ecosystem/grpc-gateway/LICENSE.txt %{buildroot}/usr/share/package-licenses/restic/c2add16c875ec7abad9c453d0a0c325dc814e8f2
-cp %{_builddir}/restic-0.9.5/vendor/github.com/inconshreveable/mousetrap/LICENSE %{buildroot}/usr/share/package-licenses/restic/9174f93c54ad0022bbb9b445480cfb6b4217226a
-cp %{_builddir}/restic-0.9.5/vendor/github.com/juju/ratelimit/LICENSE %{buildroot}/usr/share/package-licenses/restic/2a1a5c359d4a8f86d77f7cdd6b4af6583ce0db2e
-cp %{_builddir}/restic-0.9.5/vendor/github.com/kr/fs/LICENSE %{buildroot}/usr/share/package-licenses/restic/7f7a12bcfc16fab2522aa1a562fd3d2aee429d3b
-cp %{_builddir}/restic-0.9.5/vendor/github.com/kurin/blazer/LICENSE %{buildroot}/usr/share/package-licenses/restic/34418523d96f6abcdf613b70f532649c3f49f679
-cp %{_builddir}/restic-0.9.5/vendor/github.com/marstr/guid/LICENSE.txt %{buildroot}/usr/share/package-licenses/restic/2e3d2ef4c73834a3a46bcc4e9ebc2cd9a713004e
-cp %{_builddir}/restic-0.9.5/vendor/github.com/mattn/go-isatty/LICENSE %{buildroot}/usr/share/package-licenses/restic/5b53018d7f0706e49275a92d36b54cfbfbb71367
-cp %{_builddir}/restic-0.9.5/vendor/github.com/minio/minio-go/LICENSE %{buildroot}/usr/share/package-licenses/restic/2b8b815229aa8a61e483fb4ba0588b8b6c491890
-cp %{_builddir}/restic-0.9.5/vendor/github.com/mitchellh/go-homedir/LICENSE %{buildroot}/usr/share/package-licenses/restic/5ad2002bc8d2b22e2034867d159f71ba6258e18f
-cp %{_builddir}/restic-0.9.5/vendor/github.com/ncw/swift/COPYING %{buildroot}/usr/share/package-licenses/restic/8fb789d383906a5e83d6a74149e094f8d6921812
-cp %{_builddir}/restic-0.9.5/vendor/github.com/pkg/errors/LICENSE %{buildroot}/usr/share/package-licenses/restic/9c1bedc0d42f24c24a1bd266f3ce101a4b0579fc
-cp %{_builddir}/restic-0.9.5/vendor/github.com/pkg/profile/LICENSE %{buildroot}/usr/share/package-licenses/restic/f63616ea1c9a1092cfea2c3c18309e3d1b67a9c9
-cp %{_builddir}/restic-0.9.5/vendor/github.com/pkg/sftp/LICENSE %{buildroot}/usr/share/package-licenses/restic/2510861d72bd971c91b53a5c5fc291e2971c669e
-cp %{_builddir}/restic-0.9.5/vendor/github.com/pkg/xattr/LICENSE %{buildroot}/usr/share/package-licenses/restic/0f1cfab3f5481834d4f073129376589fe305c5f7
-cp %{_builddir}/restic-0.9.5/vendor/github.com/restic/chunker/LICENSE %{buildroot}/usr/share/package-licenses/restic/05eefe8d1fd29f2514df448943df0b470eb716d1
-cp %{_builddir}/restic-0.9.5/vendor/github.com/russross/blackfriday/LICENSE.txt %{buildroot}/usr/share/package-licenses/restic/da34754c05d40ff81f91de8c1b85ea6e5503e21d
-cp %{_builddir}/restic-0.9.5/vendor/github.com/satori/go.uuid/LICENSE %{buildroot}/usr/share/package-licenses/restic/b4b35a8138ee83256aca752d3813d3d0757d8380
-cp %{_builddir}/restic-0.9.5/vendor/github.com/spf13/cobra/LICENSE.txt %{buildroot}/usr/share/package-licenses/restic/c7feacb4667f8c63c89e2eeeb9a913bd3ced8ac2
-cp %{_builddir}/restic-0.9.5/vendor/github.com/spf13/pflag/LICENSE %{buildroot}/usr/share/package-licenses/restic/b3c86ae465b21f7323059db335158b48187731c7
-cp %{_builddir}/restic-0.9.5/vendor/go.opencensus.io/LICENSE %{buildroot}/usr/share/package-licenses/restic/1128f8f91104ba9ef98d37eea6523a888dcfa5de
-cp %{_builddir}/restic-0.9.5/vendor/golang.org/x/crypto/LICENSE %{buildroot}/usr/share/package-licenses/restic/d6a5f1ecaedd723c325a2063375b3517e808a2b5
-cp %{_builddir}/restic-0.9.5/vendor/golang.org/x/net/LICENSE %{buildroot}/usr/share/package-licenses/restic/d6a5f1ecaedd723c325a2063375b3517e808a2b5
-cp %{_builddir}/restic-0.9.5/vendor/golang.org/x/oauth2/LICENSE %{buildroot}/usr/share/package-licenses/restic/d6a5f1ecaedd723c325a2063375b3517e808a2b5
-cp %{_builddir}/restic-0.9.5/vendor/golang.org/x/sync/LICENSE %{buildroot}/usr/share/package-licenses/restic/d6a5f1ecaedd723c325a2063375b3517e808a2b5
-cp %{_builddir}/restic-0.9.5/vendor/golang.org/x/sys/LICENSE %{buildroot}/usr/share/package-licenses/restic/d6a5f1ecaedd723c325a2063375b3517e808a2b5
-cp %{_builddir}/restic-0.9.5/vendor/golang.org/x/text/LICENSE %{buildroot}/usr/share/package-licenses/restic/d6a5f1ecaedd723c325a2063375b3517e808a2b5
-cp %{_builddir}/restic-0.9.5/vendor/google.golang.org/api/LICENSE %{buildroot}/usr/share/package-licenses/restic/ab32a5c14ccc0a6d38e173568a5577493e3f6870
-cp %{_builddir}/restic-0.9.5/vendor/google.golang.org/api/googleapi/internal/uritemplates/LICENSE %{buildroot}/usr/share/package-licenses/restic/e99e0980a6d8f06248a213a988ba1bb3c8d4a76b
-cp %{_builddir}/restic-0.9.5/vendor/google.golang.org/appengine/LICENSE %{buildroot}/usr/share/package-licenses/restic/2b8b815229aa8a61e483fb4ba0588b8b6c491890
-cp %{_builddir}/restic-0.9.5/vendor/google.golang.org/genproto/LICENSE %{buildroot}/usr/share/package-licenses/restic/2b8b815229aa8a61e483fb4ba0588b8b6c491890
-cp %{_builddir}/restic-0.9.5/vendor/google.golang.org/grpc/LICENSE %{buildroot}/usr/share/package-licenses/restic/2b8b815229aa8a61e483fb4ba0588b8b6c491890
-cp %{_builddir}/restic-0.9.5/vendor/gopkg.in/tomb.v2/LICENSE %{buildroot}/usr/share/package-licenses/restic/178b27feb961b28990b377da59e9d43d868a0a6f
-cp %{_builddir}/restic-0.9.5/vendor/gopkg.in/yaml.v2/LICENSE %{buildroot}/usr/share/package-licenses/restic/92170cdc034b2ff819323ff670d3b7266c8bffcd
-cp %{_builddir}/restic-0.9.5/vendor/gopkg.in/yaml.v2/LICENSE.libyaml %{buildroot}/usr/share/package-licenses/restic/ad00ce7340d89dc13ccc59920ef75cb55af5b164
-cp %{_builddir}/restic-0.9.5/vendor/gopkg.in/yaml.v2/NOTICE %{buildroot}/usr/share/package-licenses/restic/9522d95b2b9b284285cc3fb6ecc445aa3ee5e785
+cp %{_builddir}/restic-0.9.6/LICENSE %{buildroot}/usr/share/package-licenses/restic/68645af047dcb3bcca960d2c1b1ece30a7141f76
+cp %{_builddir}/restic-0.9.6/vendor/bazil.org/fuse/LICENSE %{buildroot}/usr/share/package-licenses/restic/ae97d9da13b4f2a9a6c46d22d9af574956e4ea59
+cp %{_builddir}/restic-0.9.6/vendor/cloud.google.com/go/LICENSE %{buildroot}/usr/share/package-licenses/restic/2b8b815229aa8a61e483fb4ba0588b8b6c491890
+cp %{_builddir}/restic-0.9.6/vendor/github.com/Azure/azure-sdk-for-go/LICENSE %{buildroot}/usr/share/package-licenses/restic/861181924d993ee58a17a2c3c3a3faecf895849c
+cp %{_builddir}/restic-0.9.6/vendor/github.com/Azure/go-autorest/autorest/LICENSE %{buildroot}/usr/share/package-licenses/restic/308c47a3ea356402d2d14241da9a9f64cf404008
+cp %{_builddir}/restic-0.9.6/vendor/github.com/Azure/go-autorest/autorest/adal/LICENSE %{buildroot}/usr/share/package-licenses/restic/308c47a3ea356402d2d14241da9a9f64cf404008
+cp %{_builddir}/restic-0.9.6/vendor/github.com/Azure/go-autorest/autorest/date/LICENSE %{buildroot}/usr/share/package-licenses/restic/308c47a3ea356402d2d14241da9a9f64cf404008
+cp %{_builddir}/restic-0.9.6/vendor/github.com/Azure/go-autorest/logger/LICENSE %{buildroot}/usr/share/package-licenses/restic/308c47a3ea356402d2d14241da9a9f64cf404008
+cp %{_builddir}/restic-0.9.6/vendor/github.com/Azure/go-autorest/tracing/LICENSE %{buildroot}/usr/share/package-licenses/restic/308c47a3ea356402d2d14241da9a9f64cf404008
+cp %{_builddir}/restic-0.9.6/vendor/github.com/cenkalti/backoff/LICENSE %{buildroot}/usr/share/package-licenses/restic/101c182fa18fd56a09164278f17e4282264c5e9e
+cp %{_builddir}/restic-0.9.6/vendor/github.com/cpuguy83/go-md2man/LICENSE.md %{buildroot}/usr/share/package-licenses/restic/b7a606730713ac061594edab33cf941704b4a95c
+cp %{_builddir}/restic-0.9.6/vendor/github.com/dgrijalva/jwt-go/LICENSE %{buildroot}/usr/share/package-licenses/restic/b132e03c6b6bd85fbc2394f808acae8f5d0ebaf0
+cp %{_builddir}/restic-0.9.6/vendor/github.com/elithrar/simple-scrypt/LICENSE %{buildroot}/usr/share/package-licenses/restic/71a24b258c1c84ec9cb58aa6174e62477ae0af0b
+cp %{_builddir}/restic-0.9.6/vendor/github.com/golang/protobuf/LICENSE %{buildroot}/usr/share/package-licenses/restic/aa9b240f558caed367795f667629ccbca28f20b2
+cp %{_builddir}/restic-0.9.6/vendor/github.com/google/go-cmp/LICENSE %{buildroot}/usr/share/package-licenses/restic/7080652cc78cd9855d39e324529a3b5f3745dcd6
+cp %{_builddir}/restic-0.9.6/vendor/github.com/hashicorp/golang-lru/LICENSE %{buildroot}/usr/share/package-licenses/restic/ece3df1263c100f93c427face535a292723d38e7
+cp %{_builddir}/restic-0.9.6/vendor/github.com/inconshreveable/mousetrap/LICENSE %{buildroot}/usr/share/package-licenses/restic/9174f93c54ad0022bbb9b445480cfb6b4217226a
+cp %{_builddir}/restic-0.9.6/vendor/github.com/juju/ratelimit/LICENSE %{buildroot}/usr/share/package-licenses/restic/2a1a5c359d4a8f86d77f7cdd6b4af6583ce0db2e
+cp %{_builddir}/restic-0.9.6/vendor/github.com/kr/fs/LICENSE %{buildroot}/usr/share/package-licenses/restic/7f7a12bcfc16fab2522aa1a562fd3d2aee429d3b
+cp %{_builddir}/restic-0.9.6/vendor/github.com/kurin/blazer/LICENSE %{buildroot}/usr/share/package-licenses/restic/34418523d96f6abcdf613b70f532649c3f49f679
+cp %{_builddir}/restic-0.9.6/vendor/github.com/marstr/guid/LICENSE.txt %{buildroot}/usr/share/package-licenses/restic/2e3d2ef4c73834a3a46bcc4e9ebc2cd9a713004e
+cp %{_builddir}/restic-0.9.6/vendor/github.com/mattn/go-isatty/LICENSE %{buildroot}/usr/share/package-licenses/restic/5b53018d7f0706e49275a92d36b54cfbfbb71367
+cp %{_builddir}/restic-0.9.6/vendor/github.com/minio/minio-go/v6/LICENSE %{buildroot}/usr/share/package-licenses/restic/2b8b815229aa8a61e483fb4ba0588b8b6c491890
+cp %{_builddir}/restic-0.9.6/vendor/github.com/minio/sha256-simd/LICENSE %{buildroot}/usr/share/package-licenses/restic/2b8b815229aa8a61e483fb4ba0588b8b6c491890
+cp %{_builddir}/restic-0.9.6/vendor/github.com/mitchellh/go-homedir/LICENSE %{buildroot}/usr/share/package-licenses/restic/5ad2002bc8d2b22e2034867d159f71ba6258e18f
+cp %{_builddir}/restic-0.9.6/vendor/github.com/ncw/swift/COPYING %{buildroot}/usr/share/package-licenses/restic/8fb789d383906a5e83d6a74149e094f8d6921812
+cp %{_builddir}/restic-0.9.6/vendor/github.com/pkg/errors/LICENSE %{buildroot}/usr/share/package-licenses/restic/9c1bedc0d42f24c24a1bd266f3ce101a4b0579fc
+cp %{_builddir}/restic-0.9.6/vendor/github.com/pkg/profile/LICENSE %{buildroot}/usr/share/package-licenses/restic/f63616ea1c9a1092cfea2c3c18309e3d1b67a9c9
+cp %{_builddir}/restic-0.9.6/vendor/github.com/pkg/sftp/LICENSE %{buildroot}/usr/share/package-licenses/restic/2510861d72bd971c91b53a5c5fc291e2971c669e
+cp %{_builddir}/restic-0.9.6/vendor/github.com/pkg/xattr/LICENSE %{buildroot}/usr/share/package-licenses/restic/0f1cfab3f5481834d4f073129376589fe305c5f7
+cp %{_builddir}/restic-0.9.6/vendor/github.com/restic/chunker/LICENSE %{buildroot}/usr/share/package-licenses/restic/05eefe8d1fd29f2514df448943df0b470eb716d1
+cp %{_builddir}/restic-0.9.6/vendor/github.com/russross/blackfriday/LICENSE.txt %{buildroot}/usr/share/package-licenses/restic/da34754c05d40ff81f91de8c1b85ea6e5503e21d
+cp %{_builddir}/restic-0.9.6/vendor/github.com/satori/go.uuid/LICENSE %{buildroot}/usr/share/package-licenses/restic/b4b35a8138ee83256aca752d3813d3d0757d8380
+cp %{_builddir}/restic-0.9.6/vendor/github.com/spf13/cobra/LICENSE.txt %{buildroot}/usr/share/package-licenses/restic/c7feacb4667f8c63c89e2eeeb9a913bd3ced8ac2
+cp %{_builddir}/restic-0.9.6/vendor/github.com/spf13/pflag/LICENSE %{buildroot}/usr/share/package-licenses/restic/b3c86ae465b21f7323059db335158b48187731c7
+cp %{_builddir}/restic-0.9.6/vendor/go.opencensus.io/LICENSE %{buildroot}/usr/share/package-licenses/restic/1128f8f91104ba9ef98d37eea6523a888dcfa5de
+cp %{_builddir}/restic-0.9.6/vendor/golang.org/x/crypto/LICENSE %{buildroot}/usr/share/package-licenses/restic/d6a5f1ecaedd723c325a2063375b3517e808a2b5
+cp %{_builddir}/restic-0.9.6/vendor/golang.org/x/net/LICENSE %{buildroot}/usr/share/package-licenses/restic/d6a5f1ecaedd723c325a2063375b3517e808a2b5
+cp %{_builddir}/restic-0.9.6/vendor/golang.org/x/oauth2/LICENSE %{buildroot}/usr/share/package-licenses/restic/d6a5f1ecaedd723c325a2063375b3517e808a2b5
+cp %{_builddir}/restic-0.9.6/vendor/golang.org/x/sync/LICENSE %{buildroot}/usr/share/package-licenses/restic/d6a5f1ecaedd723c325a2063375b3517e808a2b5
+cp %{_builddir}/restic-0.9.6/vendor/golang.org/x/sys/LICENSE %{buildroot}/usr/share/package-licenses/restic/d6a5f1ecaedd723c325a2063375b3517e808a2b5
+cp %{_builddir}/restic-0.9.6/vendor/golang.org/x/text/LICENSE %{buildroot}/usr/share/package-licenses/restic/d6a5f1ecaedd723c325a2063375b3517e808a2b5
+cp %{_builddir}/restic-0.9.6/vendor/google.golang.org/api/LICENSE %{buildroot}/usr/share/package-licenses/restic/ab32a5c14ccc0a6d38e173568a5577493e3f6870
+cp %{_builddir}/restic-0.9.6/vendor/google.golang.org/api/googleapi/internal/uritemplates/LICENSE %{buildroot}/usr/share/package-licenses/restic/e99e0980a6d8f06248a213a988ba1bb3c8d4a76b
+cp %{_builddir}/restic-0.9.6/vendor/google.golang.org/appengine/LICENSE %{buildroot}/usr/share/package-licenses/restic/2b8b815229aa8a61e483fb4ba0588b8b6c491890
+cp %{_builddir}/restic-0.9.6/vendor/google.golang.org/genproto/LICENSE %{buildroot}/usr/share/package-licenses/restic/2b8b815229aa8a61e483fb4ba0588b8b6c491890
+cp %{_builddir}/restic-0.9.6/vendor/google.golang.org/grpc/LICENSE %{buildroot}/usr/share/package-licenses/restic/2b8b815229aa8a61e483fb4ba0588b8b6c491890
+cp %{_builddir}/restic-0.9.6/vendor/gopkg.in/ini.v1/LICENSE %{buildroot}/usr/share/package-licenses/restic/e4ef54f2c30670f950d5e196afa09c88d8ef0c8a
+cp %{_builddir}/restic-0.9.6/vendor/gopkg.in/tomb.v2/LICENSE %{buildroot}/usr/share/package-licenses/restic/178b27feb961b28990b377da59e9d43d868a0a6f
+cp %{_builddir}/restic-0.9.6/vendor/gopkg.in/yaml.v2/LICENSE %{buildroot}/usr/share/package-licenses/restic/92170cdc034b2ff819323ff670d3b7266c8bffcd
+cp %{_builddir}/restic-0.9.6/vendor/gopkg.in/yaml.v2/LICENSE.libyaml %{buildroot}/usr/share/package-licenses/restic/ad00ce7340d89dc13ccc59920ef75cb55af5b164
+cp %{_builddir}/restic-0.9.6/vendor/gopkg.in/yaml.v2/NOTICE %{buildroot}/usr/share/package-licenses/restic/9522d95b2b9b284285cc3fb6ecc445aa3ee5e785
 true
 ## install_append content
 install -d %{buildroot}/usr/bin/
@@ -183,7 +186,6 @@ install -p -m 644 doc/bash-completion.sh %{buildroot}/usr/share/bash-completion/
 /usr/share/package-licenses/restic/68645af047dcb3bcca960d2c1b1ece30a7141f76
 /usr/share/package-licenses/restic/7080652cc78cd9855d39e324529a3b5f3745dcd6
 /usr/share/package-licenses/restic/71a24b258c1c84ec9cb58aa6174e62477ae0af0b
-/usr/share/package-licenses/restic/7df059597099bb7dcf25d2a9aedfaf4465f72d8d
 /usr/share/package-licenses/restic/7f7a12bcfc16fab2522aa1a562fd3d2aee429d3b
 /usr/share/package-licenses/restic/861181924d993ee58a17a2c3c3a3faecf895849c
 /usr/share/package-licenses/restic/8fb789d383906a5e83d6a74149e094f8d6921812
@@ -199,12 +201,12 @@ install -p -m 644 doc/bash-completion.sh %{buildroot}/usr/share/bash-completion/
 /usr/share/package-licenses/restic/b3c86ae465b21f7323059db335158b48187731c7
 /usr/share/package-licenses/restic/b4b35a8138ee83256aca752d3813d3d0757d8380
 /usr/share/package-licenses/restic/b7a606730713ac061594edab33cf941704b4a95c
-/usr/share/package-licenses/restic/c2add16c875ec7abad9c453d0a0c325dc814e8f2
 /usr/share/package-licenses/restic/c7feacb4667f8c63c89e2eeeb9a913bd3ced8ac2
 /usr/share/package-licenses/restic/d6a5f1ecaedd723c325a2063375b3517e808a2b5
 /usr/share/package-licenses/restic/da34754c05d40ff81f91de8c1b85ea6e5503e21d
 /usr/share/package-licenses/restic/e4ef54f2c30670f950d5e196afa09c88d8ef0c8a
 /usr/share/package-licenses/restic/e99e0980a6d8f06248a213a988ba1bb3c8d4a76b
+/usr/share/package-licenses/restic/ece3df1263c100f93c427face535a292723d38e7
 /usr/share/package-licenses/restic/f63616ea1c9a1092cfea2c3c18309e3d1b67a9c9
 
 %files man
