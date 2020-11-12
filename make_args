@@ -1,1 +1,1 @@
--f foo.make || go build -mod=vendor -v -buildmode=pie -ldflags '-extldflags "-static-pie"' -tags netgo,osusergo -o restic ./cmd/restic
+-f foo.make || go build -mod=vendor -v -buildmode=pie -ldflags '-linkmode external -extldflags "-static-pie"' -tags netgo,osusergo -o restic ./cmd/restic

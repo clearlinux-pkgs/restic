@@ -6,7 +6,7 @@
 #
 Name     : restic
 Version  : 0.9.6
-Release  : 8
+Release  : 9
 URL      : https://github.com/restic/restic/releases/download/v0.9.6/restic-0.9.6.tar.gz
 Source0  : https://github.com/restic/restic/releases/download/v0.9.6/restic-0.9.6.tar.gz
 Source1  : https://github.com/restic/restic/releases/download/v0.9.6/restic-0.9.6.tar.gz.asc
@@ -79,17 +79,17 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1595389387
+export SOURCE_DATE_EPOCH=1605150428
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$FFLAGS -fno-lto "
 export FFLAGS="$FFLAGS -fno-lto "
 export CXXFLAGS="$CXXFLAGS -fno-lto "
-make  %{?_smp_mflags}  -f foo.make || go build -mod=vendor -v -buildmode=pie -ldflags '-extldflags "-static-pie"' -tags netgo,osusergo -o restic ./cmd/restic
+make  %{?_smp_mflags}  -f foo.make || go build -mod=vendor -v -buildmode=pie -ldflags '-linkmode external -extldflags "-static-pie"' -tags netgo,osusergo -o restic ./cmd/restic
 
 
 %install
-export SOURCE_DATE_EPOCH=1595389387
+export SOURCE_DATE_EPOCH=1605150428
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/restic
 cp %{_builddir}/restic-0.9.6/LICENSE %{buildroot}/usr/share/package-licenses/restic/68645af047dcb3bcca960d2c1b1ece30a7141f76
