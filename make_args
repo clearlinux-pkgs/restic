@@ -1,1 +1,1 @@
--f foo.make || go build -mod=vendor -v -tags netgo,osusergo -o restic ./cmd/restic
+-f foo.make || go build -v -mod=vendor -ldflags='-X main.version=%{version}' -o ./restic ./cmd/restic
