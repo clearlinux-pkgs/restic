@@ -1,0 +1,8 @@
+Create vendored dependencies for offline build by updating the
+projects/restic-vendor repository. In restic-vendor, run `make VER="<ResticVer>"` to
+automate most of the process, where <ResticVer> is the upstream restic version
+(without the "v" prefix).
+
+If a hotfix restic-vendor release is ever needed, extend the release version with
+a 4th number. For example, a hotfix release for restic-vendor 0.12.0 would have
+version "0.12.0.1", a second hotfix release would be "0.12.0.2", etc.
