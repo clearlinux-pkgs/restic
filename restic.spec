@@ -5,12 +5,12 @@
 # Source0 file verified with key 0x91A6868BD3F7A907 (alexander@bumpern.de)
 #
 Name     : restic
-Version  : 0.13.0
-Release  : 31
-URL      : https://github.com/restic/restic/releases/download/v0.13.0/restic-0.13.0.tar.gz
-Source0  : https://github.com/restic/restic/releases/download/v0.13.0/restic-0.13.0.tar.gz
+Version  : 0.13.1
+Release  : 32
+URL      : https://github.com/restic/restic/releases/download/v0.13.1/restic-0.13.1.tar.gz
+Source0  : https://github.com/restic/restic/releases/download/v0.13.1/restic-0.13.1.tar.gz
 Source1  : http://localhost/cgit/projects/restic-vendor/snapshot/restic-vendor-0.13.0.tar.xz
-Source2  : https://github.com/restic/restic/releases/download/v0.13.0/restic-0.13.0.tar.gz.asc
+Source2  : https://github.com/restic/restic/releases/download/v0.13.1/restic-0.13.1.tar.gz.asc
 Summary  : restic is a backup program that is fast, efficient and secure.
 Group    : Development/Tools
 License  : Apache-2.0 BSD-2-Clause BSD-3-Clause LGPL-3.0 MIT MPL-2.0
@@ -72,19 +72,19 @@ man components for the restic package.
 
 
 %prep
-%setup -q -n restic-0.13.0
+%setup -q -n restic-0.13.1
 cd %{_builddir}
 tar xf %{_sourcedir}/restic-vendor-0.13.0.tar.xz
-cd %{_builddir}/restic-0.13.0
+cd %{_builddir}/restic-0.13.1
 mkdir -p ./
-cp -r %{_builddir}/restic-vendor-0.13.0/* %{_builddir}/restic-0.13.0/./
+cp -r %{_builddir}/restic-vendor-0.13.0/* %{_builddir}/restic-0.13.1/./
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1648524099
+export SOURCE_DATE_EPOCH=1649700612
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$FFLAGS -fno-lto "
@@ -94,10 +94,10 @@ make  %{?_smp_mflags}  -f foo.make || go build -v -mod=vendor -ldflags='-X main.
 
 
 %install
-export SOURCE_DATE_EPOCH=1648524099
+export SOURCE_DATE_EPOCH=1649700612
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/restic
-cp %{_builddir}/restic-0.13.0/LICENSE %{buildroot}/usr/share/package-licenses/restic/68645af047dcb3bcca960d2c1b1ece30a7141f76
+cp %{_builddir}/restic-0.13.1/LICENSE %{buildroot}/usr/share/package-licenses/restic/68645af047dcb3bcca960d2c1b1ece30a7141f76
 cp %{_builddir}/restic-vendor-0.13.0/vendor/cloud.google.com/go/LICENSE %{buildroot}/usr/share/package-licenses/restic/2b8b815229aa8a61e483fb4ba0588b8b6c491890
 cp %{_builddir}/restic-vendor-0.13.0/vendor/cloud.google.com/go/storage/LICENSE %{buildroot}/usr/share/package-licenses/restic/2b8b815229aa8a61e483fb4ba0588b8b6c491890
 cp %{_builddir}/restic-vendor-0.13.0/vendor/github.com/Azure/azure-sdk-for-go/LICENSE.txt %{buildroot}/usr/share/package-licenses/restic/8c75482f0524bdb84618d5db4d4cef306d7b9784
