@@ -6,7 +6,7 @@
 #
 Name     : restic
 Version  : 0.13.1
-Release  : 32
+Release  : 33
 URL      : https://github.com/restic/restic/releases/download/v0.13.1/restic-0.13.1.tar.gz
 Source0  : https://github.com/restic/restic/releases/download/v0.13.1/restic-0.13.1.tar.gz
 Source1  : http://localhost/cgit/projects/restic-vendor/snapshot/restic-vendor-0.13.0.tar.xz
